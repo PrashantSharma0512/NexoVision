@@ -15,4 +15,6 @@ router.post('/create',teacherController.createTeacher)
 router.put('/update/:id', teacherController.updateTeacher);
 // Delete a teacher
 router.delete('/delete/:id', teacherController.deleteTeacher);
+// Add search route
+router.get('/search', teacherController.searchTeachers);
 module.exports = router;

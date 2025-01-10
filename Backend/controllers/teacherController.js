@@ -90,11 +90,35 @@ const deleteTeacher = async (req, res) => {
         res.status(500).json({ error: 'Failed to delete teacher' });
     }
 };
+const searchTeachers = async (req, res) => {
+    try {
+        const Teacher = model('teacher');
+        const { query } = req.query;
+
+        if (!query) {
+            return res.status(400).json({ error: 'Search query is required' });
+        }
+        const result = await Teacher.find({
+            $text: { $search: query },
+            isDeleted: false // Exclude deleted teachers
+        });
+
+        if (result.length === 0) {
+            return res.status(404).json({ message: 'No matching teachers found' });
+        }
+
+        res.status(200).json(result);
+    } catch (error) {
+        console.error('Error searching for teachers:', error);
+        res.status(500).json({ error: 'Failed to search teachers' });
+    }
+};
 
 
 teacherController.Details = Details;
 teacherController.updateTeacher = updateTeacher;
 teacherController.createTeacher = createTeacher;
 teacherController.deleteTeacher = deleteTeacher;
+teacherController.searchTeachers = searchTeachers;
 
 module.exports = teacherController;

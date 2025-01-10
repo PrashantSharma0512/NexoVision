@@ -18,5 +18,6 @@ module.exports = (nosql) => ({
             phone: { type: Number, unique: true },
             isDeleted: {type : Boolean, default:false}
         })
+        .index({ name: 'text', designation: 'text', branch: 'text',email:'text' })
     ),
 });
