@@ -10,7 +10,7 @@ app.use(express.json());
 
 // Connect to MongoDB
 mongoose.connect(process.env.MONGO_URI, {useNewUrlParser: true, useUnifiedTopology: true,})
-  .then(() => console.log(`MongoDB is connected at port ${PORT}`))
+  .then(() => console.log(`MongoDB is Connected Successfully`))
   .catch((err) => {
     console.error('Error connecting to MongoDB:', err);
     process.exit(1); // Exit the process with failure code
@@ -34,11 +34,13 @@ mongoose.connect(process.env.MONGO_URI, {useNewUrlParser: true, useUnifiedTopolo
 // const indexRouter = require('./routes/index');
 // const usersRouter = require('./routes/users');
 const teacherRouter = require('./routes/teacher');
+const admin = require('./routes/admin');
 
 // Setup routes
 // app.use('/', indexRouter);
 // app.use('/users', usersRouter);
 app.use('/teacher', teacherRouter);
+app.use('/admin', admin);
 
 // Start the server
 app.listen(PORT, () => {
