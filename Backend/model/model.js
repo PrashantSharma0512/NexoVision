@@ -26,18 +26,16 @@ module.exports = (nosql) => ({
         new nosql.Schema({
             name: { type: String, required: true },
             email: { type: String, unique: true, required: true },
-            phone: { type: Number, unique: true },
-            password: { type: String, required: true },
+            password: { type: String },
             isDeleted: { type: Boolean, default: false },
-            role: { type: String, default: 'student', enum: ['admin', 'teacher', 'student'] }
+            role: { type: String, default: 'student', enum: ['admin', 'teacher', 'student'] },
         })
     ),
 
     attendence: nosql.model(
         'attendence',
         new nosql.Schema({
-            rollno: { type: mongoose.Schema.Types.ObjectId, ref: 'register' },
-            subject: { type: String, required: true },
+            rollno: { type: mongoose.Schema.Types.ObjectId, ref: 'register' },  
             date: { type: Date, required: true },
             status: { type: String, enum: ['present', 'absent'], required: true },
             isDeleted: { type: Boolean, default: false }
