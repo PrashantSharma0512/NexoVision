@@ -5,6 +5,7 @@ module.exports = (nosql) => ({
         'FaceSchema',
         new nosql.Schema({
             name: String,
+            rollno: { type: String, unique: true },
             faceToken: String // Face++ face_token
         })
     ),
@@ -35,7 +36,7 @@ module.exports = (nosql) => ({
     attendence: nosql.model(
         'attendence',
         new nosql.Schema({
-            rollno: { type: mongoose.Schema.Types.ObjectId, ref: 'register' },  
+            rollno: { type: String, required: true },  
             date: { type: Date, required: true },
             status: { type: String, enum: ['present', 'absent'], required: true },
             isDeleted: { type: Boolean, default: false }

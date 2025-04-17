@@ -8,8 +8,8 @@ const { FACEPP_API_KEY, FACEPP_API_SECRET, FACEPP_OUTER_ID } = process.env;
 
 const registerFace = async (req, res) => {
   try {
-    const { name, imageBase64 , password} = req.body;
-    if (!name || !imageBase64) {
+    const { name, imageBase64, rollno } = req.body;
+    if (!name || !imageBase64 || !rollno) {
       return res.status(400).json({ message: 'Missing fields' });
     }
 
@@ -34,11 +34,12 @@ const registerFace = async (req, res) => {
     if (!face_token) {
       return res.status(400).json({ message: 'No face detected' });
     }
-const FaceSchema = nosql.model('FaceSchema');
+    const FaceSchema = nosql.model('FaceSchema');
     // Create user
     const user = await FaceSchema.create({
       name,
-      faceToken : face_token
+      rollno,
+      faceToken: face_token
     });
 
     // Prepare form data for FaceSet
@@ -71,8 +72,6 @@ const recognizeFace = async (req, res) => {
       return res.status(400).json({ message: 'No image provided' });
     }
 
-    console.log("📸 Starting face recognition...");
-
     // Prepare form data for Face search
     const formData = new URLSearchParams();
     formData.append('api_key', FACEPP_API_KEY);
@@ -87,8 +86,6 @@ const recognizeFace = async (req, res) => {
       },
     });
 
-    console.log("✅ Face recognition response:", searchRes.data);
-
     const token = searchRes.data?.results?.[0]?.face_token;
     if (!token || searchRes.data.results[0].confidence < 80) {
       return res.status(401).json({ message: 'Face not recognized' });
@@ -98,21 +95,24 @@ const recognizeFace = async (req, res) => {
     if (!user) {
       return res.status(404).json({ message: 'No user found with this face' });
     }
-const Attendance = nosql.model('attendence');
+    const Attendance = nosql.model('attendence');
     // Mark attendance
     const today = new Date();
     const alreadyMarked = await Attendance.findOne({
-      rollno: user._id,
+      rollno: user.rollno,
       date: { $gte: new Date(today.setHours(0, 0, 0, 0)) },
     });
 
     if (alreadyMarked) {
-      return res.json({ message: 'Attendance already marked', name: user.name });
+      return res.json({
+        message: 'Attendance already marked', name: user.name,
+        rollno: user.rollno
+      });
     }
 
     // Create attendance record
     await Attendance.create({
-      rollno: user._id,
+      rollno: user.rollno,
       date: new Date(),
       status: 'present',
     });

@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 const RegisterFace = () => {
   const [formData, setFormData] = useState({
     name: '',
+    imageBase64: null,
     rollno: '',
   });
   const [message, setMessage] = useState({ text: '', type: '' });
@@ -35,6 +36,7 @@ const RegisterFace = () => {
         // email: `${formData.rollno}@faceapp.com`,
         // password: formData.password,
         imageBase64: base64Data,
+        rollno: formData.rollno,
       });
 
       setMessage({ text: res.data.message, type: 'success' });

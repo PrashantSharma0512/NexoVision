@@ -1,30 +1,43 @@
 const multer = require('multer');
 const path = require('path');
-
-// Storage setup
+const fs = require('fs');
+// Configure storage
 const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, 'uploads/'); // Directory for storing files
+  destination: (req, file, cb) => {
+    const uploadDir = path.join(__dirname, '..', 'uploads');
+    
+    // Create uploads directory if it doesn't exist
+    if (!fs.existsSync(uploadDir)) {
+      fs.mkdirSync(uploadDir, { recursive: true });
+    }
+    
+    cb(null, uploadDir);
   },
-  filename: function (req, file, cb) {
-    const uniqueName = Date.now() + '-' + file.originalname;
-    cb(null, uniqueName);
+  filename: (req, file, cb) => {
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+    const ext = path.extname(file.originalname);
+    cb(null, `${uniqueSuffix}${ext}`);
   }
 });
 
-// File filter (optional - PDF only, for example)
+// File filter for allowed types
 const fileFilter = (req, file, cb) => {
+  const allowedTypes = ['.pdf', '.docx', '.doc', '.txt'];
   const ext = path.extname(file.originalname).toLowerCase();
-  if (ext === '.pdf' || ext === '.docx' || ext === '.txt') {
+  
+  if (allowedTypes.includes(ext)) {
     cb(null, true);
   } else {
-    cb(new Error('Only PDF, DOCX, or TXT files are allowed'), false);
+    cb(new Error('Only PDF, DOCX, DOC, and TXT files are allowed'), false);
   }
 };
 
-const upload = multer({
+// Configure multer upload
+const upload = multer({ 
   storage: storage,
-  fileFilter: fileFilter
+  fileFilter: fileFilter,
+  limits: {
+    fileSize: 5 * 1024 * 1024 // 5MB limit
+  }
 });
-
 module.exports = upload;

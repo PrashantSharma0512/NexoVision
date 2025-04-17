@@ -26,7 +26,7 @@ const FaceAttendance = () => {
       const res = await axios.post('http://localhost:5000/api/attendance/recognize', {
         imageBase64: base64Data,
       });
-      setResult(res.data.message + (res.data.name ? ` (${res.data.name})` : ''));
+      setResult(res.data.message + (res.data.name ? ` (${res.data.name})` : ''+ res.data.rollno ? ` (${res.data.rollno})` : ''));
       // Redirect after successful recognition (optional)
       if (res.data.success) {
         setTimeout(() => navigate('/dashboard'), 2000);
