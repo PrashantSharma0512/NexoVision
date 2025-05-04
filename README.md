@@ -41,4 +41,6 @@ We welcome contributions!.
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for more information.
 
 ## Contact
-For any inquiries or feedback, please contact us at [email@example.com](mailto:email@example.com).
+For any inquiries or feedback, please contact us at [email@example.com](mailto:prashantsharma0512@examplegmailn.com).
+
+
