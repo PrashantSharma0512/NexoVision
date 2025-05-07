@@ -2,6 +2,7 @@
 
 ## Overview
 NexoVision is a cutting-edge project aimed at revolutionizing the way we interact with visual data. This project leverages advanced technologies to provide innovative solutions for various industries.
+author
 
 ## Features
 - **Feature 1**: Attendence System with Face Recognition.
